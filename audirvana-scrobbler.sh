@@ -1,13 +1,15 @@
 #!/bin/zsh
 
-##   Audirvana Scrobbler
-##   Ver: 1.0.1
+##   Audirvana Plus Scrobbler
+##   Ver: 1.0.2
 ##
-##   Scrobble Audirvana tracks to last.fm
+##   Scrobble Audirvana Plus tracks to last.fm
 ##   Req: python3 + scrobblerh (pip install)
 ##
 ##   2019-11-10
 
+# launch Audirvana Plus
+open -a /Applications/Audirvana\ Plus.app
 
 # set properties
 export DEFAULT_SLEEP_TIME=3
@@ -31,7 +33,7 @@ export THRESHOLD=75
 export TIMESTAMP
 export TRACK_DURATION=""
 export TRACK_HAS_BEEN_SCROBBLED=false
-export VERSION="1.0.1"
+export VERSION="1.0.2 by hiphap4ik"
 
 
 # functions
@@ -39,7 +41,7 @@ function IS_AUDIRVANA_RUNNING {
 	AUDIRVANA_RUNNING_STATE=$(osascript <<-APPLESCRIPT
 		tell application "System Events"
 			set listApplicationProcessNames to name of every application process
-			if listApplicationProcessNames contains "Audirvana" then
+			if listApplicationProcessNames contains "Audirvana Plus" then
 				set AUDIRVANA_RUNNING_STATE to "yes"
 			else
 				set AUDIRVANA_RUNNING_STATE to "no"
@@ -50,12 +52,12 @@ function IS_AUDIRVANA_RUNNING {
 }
 
 function CHECK_AUDIRVANA_STATE {
-	CURRENT_PLAYER_STATE=$(osascript -e 'tell application "Audirvana" to get player state')
+	CURRENT_PLAYER_STATE=$(osascript -e 'tell application "Audirvana Plus" to get player state')
 }
 
 function GET_NOW_PLAYING_DATA {
 	NOW_PLAYING_TRACK_DATA=$(osascript <<-APPLESCRIPT
-	tell application "Audirvana"
+	tell application "Audirvana Plus"
 		set playingTrack to playing track title
 		set playingAlbum to playing track album
 		set playingArtist to playing track artist
@@ -88,14 +90,14 @@ function TEST_IF_TRACK_IS_ABOVE_THRESHOLD {
 
 function ECHO_FUNCTION {
 	echo -n "\e[0J" # clear everything after the cursor
-	echo "\r\e[0K  Audirvana....: $1\n  Last.fm......: $SCROBBLE_MESSAGE"
+	echo "\r\e[0K  Audirvana Plus....: $1\n  Last.fm......: $SCROBBLE_MESSAGE"
 	tput cup 4
 }
 
 function COMPARE_TRACK_DATA {
 	if [[ "$CURRENT_TRACK_INFO" != "$PREVIOUS_TRACK_INFO" ]]; then
 		TRACK_HAS_BEEN_SCROBBLED=false
-		TIMESTAMP=$(date "+%Y-%m-%d.%H:%M")		
+		TIMESTAMP=$(date "+%Y-%m-%d.%H:%M")
 		NOW_PLAYING
 	fi
 	PREVIOUS_TRACK_INFO="$CURRENT_TRACK_INFO"
@@ -118,7 +120,7 @@ function SCROBBLE {
 # initiate script
 echo "\e[?25l" # hide cursor
 clear
-printf "\n  Audirvana Scrobbler Script %s * Running...\n  =============================================\n\n" "$VERSION"
+printf "\n  Audirvana Plus Scrobbler Script %s * Running...\n  =============================================\n\n" "$VERSION"
 
 while sleep $SLEEP_TIME; do
 	if (( AUDIRVANA_IDLE_TIME >= AUDIRVANA_IDLE_THRESHOLD )); then
