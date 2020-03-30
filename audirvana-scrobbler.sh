@@ -6,7 +6,7 @@
 ##   Scrobble Audirvana Plus tracks to last.fm
 ##   Req: python3 + scrobblerh (pip install)
 ##
-##   2019-11-10
+##   2020-03-30
 
 # launch Audirvana Plus
 open -a /Applications/Audirvana\ Plus.app
